@@ -20,24 +20,53 @@ function formatTime(iso) {
   return new Intl.DateTimeFormat([], { hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
 }
 
+function avatarFor(name) {
+  return String(name || 'G').trim().slice(0, 1).toUpperCase();
+}
+
+function removeEmptyState() {
+  document.querySelector('#emptyState')?.remove();
+}
+
+function showEmptyState() {
+  messages.innerHTML = `
+    <li class="empty-state" id="emptyState">
+      <div>✨</div>
+      <h3>No messages yet</h3>
+      <p>Start the conversation. Your messages will appear here.</p>
+    </li>
+  `;
+}
+
 function scrollToBottom() {
   messages.scrollTop = messages.scrollHeight;
 }
 
+function setStatus(text, connected = true) {
+  statusText.innerHTML = `<span class="status-dot ${connected ? '' : 'offline'}"></span> ${text}`;
+}
+
 function addMessage(message) {
+  removeEmptyState();
+
   const li = document.createElement('li');
   li.className = `message ${message.username === currentUser ? 'mine' : ''}`;
   li.innerHTML = `
-    <div class="meta"><strong></strong><span>${formatTime(message.time)}</span></div>
+    <div class="meta">
+      <strong></strong>
+      <span>${formatTime(message.time)}</span>
+    </div>
     <div class="content"></div>
   `;
-  li.querySelector('strong').textContent = message.username;
+
+  li.querySelector('strong').textContent = message.username === currentUser ? 'You' : message.username;
   li.querySelector('.content').textContent = message.content;
   messages.appendChild(li);
   scrollToBottom();
 }
 
 function addSystemMessage(text) {
+  removeEmptyState();
   const li = document.createElement('li');
   li.className = 'system';
   li.textContent = text;
@@ -75,14 +104,19 @@ messageInput.addEventListener('input', () => {
 });
 
 socket.on('connect', () => {
-  statusText.textContent = 'Connected';
+  setStatus('Connected', true);
 });
 
 socket.on('disconnect', () => {
-  statusText.textContent = 'Disconnected, reconnecting...';
+  setStatus('Reconnecting...', false);
 });
 
 socket.on('chat:history', (history) => {
+  if (!history.length) {
+    showEmptyState();
+    return;
+  }
+
   messages.innerHTML = '';
   history.forEach(addMessage);
 });
@@ -94,7 +128,9 @@ socket.on('users:update', (users) => {
   usersList.innerHTML = '';
   users.forEach((user) => {
     const li = document.createElement('li');
-    li.textContent = user;
+    li.innerHTML = `<span class="user-avatar"></span><span class="user-name"></span>`;
+    li.querySelector('.user-avatar').textContent = avatarFor(user);
+    li.querySelector('.user-name').textContent = user === currentUser ? `${user} (you)` : user;
     usersList.appendChild(li);
   });
   onlineCount.textContent = users.length;

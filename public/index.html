@@ -3,46 +3,89 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple Chat App</title>
+    <title>Orbit Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main class="app">
+    <div class="bg-orb orb-one"></div>
+    <div class="bg-orb orb-two"></div>
+    <div class="bg-grid"></div>
+
+    <main class="app-shell">
       <section class="login-card" id="loginCard">
-        <h1>Simple Chat</h1>
-        <p>Enter your name to join the room.</p>
-        <form id="loginForm">
-          <input id="usernameInput" maxlength="24" placeholder="Your name" autocomplete="name" required />
-          <button type="submit">Join Chat</button>
+        <div class="brand-mark">💬</div>
+        <p class="eyebrow">Real-time chat room</p>
+        <h1>Welcome to Orbit Chat</h1>
+        <p class="subtext">Pick a name, jump in, and start chatting with your friends instantly.</p>
+        <form class="login-form" id="loginForm">
+          <label for="usernameInput">Display name</label>
+          <div class="input-row">
+            <input id="usernameInput" maxlength="24" placeholder="e.g. Monil" autocomplete="name" required />
+            <button type="submit">Join</button>
+          </div>
         </form>
       </section>
 
-      <section class="chat-card hidden" id="chatCard">
-        <header class="chat-header">
-          <div>
-            <h1>Simple Chat</h1>
-            <p id="statusText">Connected</p>
+      <section class="chat-window hidden" id="chatCard" aria-label="Chat app">
+        <aside class="sidebar">
+          <div class="sidebar-top">
+            <div class="app-logo">OC</div>
+            <div>
+              <h2>Orbit Chat</h2>
+              <p id="statusText"><span class="status-dot"></span> Connected</p>
+            </div>
           </div>
-          <aside>
-            <strong>Online</strong>
-            <span id="onlineCount">0</span>
-          </aside>
-        </header>
 
-        <div class="layout">
-          <ul class="messages" id="messages"></ul>
-          <aside class="users">
-            <h2>Users</h2>
-            <ul id="usersList"></ul>
-          </aside>
-        </div>
+          <div class="room-card">
+            <span class="room-icon">#</span>
+            <div>
+              <strong>General Room</strong>
+              <small>Public conversation</small>
+            </div>
+          </div>
 
-        <p class="typing" id="typingText"></p>
+          <div class="online-panel">
+            <div class="panel-title">
+              <span>Online now</span>
+              <b id="onlineCount">0</b>
+            </div>
+            <ul id="usersList" class="users-list"></ul>
+          </div>
+        </aside>
 
-        <form class="message-form" id="messageForm">
-          <input id="messageInput" maxlength="1000" placeholder="Type a message..." autocomplete="off" />
-          <button type="submit">Send</button>
-        </form>
+        <section class="conversation">
+          <header class="conversation-header">
+            <div>
+              <p class="eyebrow">Live room</p>
+              <h1>General Chat</h1>
+            </div>
+            <div class="header-actions">
+              <span class="pill">Socket.IO</span>
+              <span class="pill live">Live</span>
+            </div>
+          </header>
+
+          <ul class="messages" id="messages">
+            <li class="empty-state" id="emptyState">
+              <div>✨</div>
+              <h3>No messages yet</h3>
+              <p>Start the conversation. Your messages will appear here.</p>
+            </li>
+          </ul>
+
+          <div class="typing" id="typingText" aria-live="polite"></div>
+
+          <form class="message-form" id="messageForm">
+            <input id="messageInput" maxlength="1000" placeholder="Write a message..." autocomplete="off" />
+            <button type="submit" aria-label="Send message">
+              <span>Send</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.4 20.4 22 12 2.4 3.6l-.1 6.5L15 12 2.3 13.9l.1 6.5Z" /></svg>
+            </button>
+          </form>
+        </section>
       </section>
     </main>
 
