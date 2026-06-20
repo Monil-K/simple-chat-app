@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Chat App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="login-card" id="loginCard">
+        <h1>Simple Chat</h1>
+        <p>Enter your name to join the room.</p>
+        <form id="loginForm">
+          <input id="usernameInput" maxlength="24" placeholder="Your name" autocomplete="name" required />
+          <button type="submit">Join Chat</button>
+        </form>
+      </section>
+
+      <section class="chat-card hidden" id="chatCard">
+        <header class="chat-header">
+          <div>
+            <h1>Simple Chat</h1>
+            <p id="statusText">Connected</p>
+          </div>
+          <aside>
+            <strong>Online</strong>
+            <span id="onlineCount">0</span>
+          </aside>
+        </header>
+
+        <div class="layout">
+          <ul class="messages" id="messages"></ul>
+          <aside class="users">
+            <h2>Users</h2>
+            <ul id="usersList"></ul>
+          </aside>
+        </div>
+
+        <p class="typing" id="typingText"></p>
+
+        <form class="message-form" id="messageForm">
+          <input id="messageInput" maxlength="1000" placeholder="Type a message..." autocomplete="off" />
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
